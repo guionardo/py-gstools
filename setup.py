@@ -26,7 +26,7 @@ def get_definitions(rel_path, *words):
 long_description = read('README.md')
 
 _name, _version, _description, _author, _author_email = get_definitions(
-    os.path.join('src', '__init__.py'),
+    os.path.join('gs', '__init__.py'),
     'tool_name',
     'version',
     'description',
@@ -48,15 +48,15 @@ setup(
         "Topic :: Software Development :: Build Tools",
         "Topic :: Utilities",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
-    url='CHANGE_THIS',
-    keywords='CHANGE_THIS',
+    url='https://github.com/guionardo/py-gstools',
+    keywords='tools',
     project_urls={
-        "Documentation": "CHANGE_THIS/wiki",
-        "Source": "CHANGE_THIS",
+        "Documentation": "https://github.com/guionardo/py-gstools/wiki",
+        "Source": "https://github.com/guionardo/py-gstools",
     },
     author=_author,
     author_email=_author_email,
@@ -67,5 +67,5 @@ setup(
     install_requires=[
     ],
     zip_safe=True,
-    python_requires='>=3.6.*'
+    python_requires='>=3.8.*'
 )
