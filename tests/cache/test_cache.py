@@ -10,14 +10,17 @@ class TestCache(unittest.TestCase):
     """Test Caches"""
 
     def test_unknown_cache(self):
+        """Asserts uknown cache type raises exception"""
         with self.assertRaises(Exception):
             get_cache('unknown')
 
     def test_memory_cache(self):
+        """Test memory cache"""
         cache = get_cache('memory')
         self._test_cache(cache, MemoryCache)
 
     def test_file_cache(self):
+        """Test file cache"""
         with tempfile.TemporaryDirectory() as tmpdir:
             cache = get_cache(f'path://{tmpdir}')
             self._test_cache(cache, FileCache)

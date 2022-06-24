@@ -19,6 +19,7 @@ class MemoryCache(Cache):
             if valid_until > datetime.datetime.now():
                 return value
             del self.cache[key]
+        return None
 
     def set(self, key: str, value: str,
             ttl: datetime.timedelta = datetime.timedelta(seconds=0)) -> None:
