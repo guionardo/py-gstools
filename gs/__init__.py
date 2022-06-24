@@ -1,4 +1,4 @@
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __tool_name__ = 'py-gstools'
 __description__ = 'Tool classes and functions for Guiosoft projects'
 __author__ = 'Guionardo Furlan'
