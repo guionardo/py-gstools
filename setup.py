@@ -65,6 +65,7 @@ setup(
         exclude=["tests"],
     ),
     install_requires=[
+        'redis>=4.3.3'
     ],
     zip_safe=True,
     python_requires='>=3.8.*'

@@ -11,6 +11,7 @@ twine = "*"
 setuptools = "*"
 
 [packages]
+redis = "*"
 
 [requires]
 python_version = "3.8"

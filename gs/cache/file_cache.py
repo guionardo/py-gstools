@@ -1,0 +1,52 @@
+import datetime
+import json
+import logging
+import os
+from typing import Union
+
+from .cache_protocol import Cache
+
+
+class FileCache(Cache):
+    def __init__(self) -> None:
+        self.log = logging.getLogger(self.__class__.__name__)
+        self.log.info('Initialized')
+
+    def _filename(self, key: str) -> str:
+        return os.path.join(self.path, f'cache_{hash(key)}.json')
+
+    def get(self, key: str) -> Union[str, None]:
+        filename = self._filename(key)
+
+        if not os.path.isfile(filename):
+            return None
+        try:
+            with open(filename, 'r') as file:
+                value, valid_until = json.load(file)
+            if valid_until > datetime.datetime.now().timestamp():
+                return value
+        except Exception as exc:
+            self.log.error(f'Error reading cache file {filename}: {exc}')
+
+        os.remove(filename)
+
+    def set(self, key: str, value: str, ttl: datetime.timedelta = datetime.timedelta(seconds=0)) -> None:
+        valid_until = datetime.datetime(datetime.MAXYEAR, 1, 1) if ttl.total_seconds(
+        ) == 0 else datetime.datetime.now() + ttl
+        filename = self._filename(key)
+        try:
+            with open(filename, 'w') as file:
+                json.dump((value, valid_until.timestamp()), file)
+        except Exception as exc:
+            self.log.error(f'Error writing cache file {filename}: {exc}')
+
+    def parse(self, connection_string: str) -> 'Cache':
+        """path:str"""
+        words = connection_string.split(':', maxsplit=1)
+        if len(words) != 2 or words[0] != 'path':
+            return None
+        path = words[1]
+        if not os.path.isdir(path):
+            os.makedirs(path, exist_ok=True)
+        self.path = path
+        return self
