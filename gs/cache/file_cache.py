@@ -33,6 +33,7 @@ class FileCache(Cache):
             self.log.error('Error reading cache file %s: %s', filename, exc)
 
         os.remove(filename)
+        return None
 
     def set(self, key: str, value: str,
             ttl: datetime.timedelta = datetime.timedelta(seconds=0)) -> None:
