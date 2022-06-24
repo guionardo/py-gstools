@@ -1,3 +1,4 @@
+"""Test Caches"""
 import datetime
 import tempfile
 import unittest
@@ -6,6 +7,7 @@ from gs.cache import Cache, FileCache, MemoryCache, get_cache
 
 
 class TestCache(unittest.TestCase):
+    """Test Caches"""
 
     def test_unknown_cache(self):
         with self.assertRaises(Exception):
@@ -20,8 +22,8 @@ class TestCache(unittest.TestCase):
             cache = get_cache(f'path://{tmpdir}')
             self._test_cache(cache, FileCache)
 
-    def _test_cache(self, cache: Cache, type):
-        self.assertIsInstance(cache, type)
+    def _test_cache(self, cache: Cache, class_type):
+        self.assertIsInstance(cache, class_type)
         cache.set('test_key', 'test_value')
         self.assertEqual(cache.get('test_key'), 'test_value')
 

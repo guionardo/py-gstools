@@ -1,17 +1,19 @@
+"""Setup"""
 import codecs
 import os
-import sys
 
 from setuptools import find_packages, setup
 
 
 def read(rel_path):
+    """Read file content."""
     here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
-        return fp.read()
+    with codecs.open(os.path.join(here, rel_path), 'r') as file:
+        return file.read()
 
 
 def get_definitions(rel_path, *words):
+    """Get definitions from package data file"""
     dwords = {word: None for word in words}
     for line in read(rel_path).splitlines():
         for word in words:
