@@ -17,7 +17,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+        pip install pylint flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi    
     - name: Analysing the code with pylint
       run: |
         pylint -j 4 --fail-under=9 $(git ls-files '*.py')
+    - name: Test with pytest
+      run: |
+        pytest
