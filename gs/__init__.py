@@ -1,5 +1,5 @@
 """Package data"""
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 __tool_name__ = 'py-gstools'
 __description__ = 'Tool classes and functions for Guiosoft projects'
 __author__ = 'Guionardo Furlan'
