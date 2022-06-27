@@ -2,8 +2,11 @@
 import datetime
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from gs.cache import Cache, FileCache, MemoryCache, get_cache
+from gs.cache import Cache, FileCache, MemoryCache, RedisCache, get_cache
+
+from .mock_cache_redis import fake_from_url
 
 
 class TestCache(unittest.TestCase):
@@ -24,6 +27,12 @@ class TestCache(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             cache = get_cache(f'path://{tmpdir}')
             self._test_cache(cache, FileCache)
+
+    @patch('redis.utils.from_url', fake_from_url)
+    def test_redis_cache(self):
+        """Test redis cache"""
+        cache = get_cache('redis://localhost:6379/0')
+        self._test_cache(cache, RedisCache)
 
     def _test_cache(self, cache: Cache, class_type):
         self.assertIsInstance(cache, class_type)
