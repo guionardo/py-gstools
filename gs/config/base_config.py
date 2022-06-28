@@ -37,7 +37,9 @@ def _create_config_field(internal_name: str, field_type: type,
 
         raise TypeError(f'Unknown type {value_type}')
 
-    def load(source: dict) -> any:
+    def load(source: dict, returns_field_name: bool = False) -> any:
+        if returns_field_name:
+            return field_name
         if field_name in source:
             source_value = source[field_name]
             if not is_list:
@@ -46,7 +48,10 @@ def _create_config_field(internal_name: str, field_type: type,
                 source_value = [__parse_value_type(v, field_type)
                                 for v in source_value]
         else:
-            source_value = default_value
+            if not is_list or isinstance(default_value, list):
+                source_value = default_value
+            else:
+                source_value = [default_value]
 
         return source_value
 
@@ -71,6 +76,16 @@ class BaseConfig:
     def __init__(self, source=None, **dict_source):
         self.__fields = self.__parse_fields()
         self.__load(source or dict_source)
+
+    @classmethod
+    def load_from_env(cls) -> 'BaseConfig':
+        """Load configuration from environment variables"""
+        return cls(**os.environ)
+
+    @classmethod
+    def load_from_file(cls, filename: str) -> 'BaseConfig':
+        """Load configuration from file"""
+        return cls(filename)
 
     def __parse_fields(self):
 
@@ -108,8 +123,10 @@ class BaseConfig:
             setattr(self, member, field(source))
 
     def __parse_value_type(self, value_type, value):
-        if value_type in (int, float, bool, str):
+        if value_type in (int, float, str):
             return value_type(value)
+        if value_type == bool:
+            return value.lower()[0] in ('t', '1', 'y')
 
         if value_type == datetime:
             return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
@@ -151,5 +168,32 @@ class BaseConfig:
             f"{k}={repr(getattr(self,k))}" for k in self.__fields)
         return f'{self.__class__.__name__}({fields})'
 
-    def __dict__(self) -> dict:
-        return
+    def sample_dict(self) -> dict:
+        """Return a sample dictionary with all fields and default values"""
+        def _sample_dict(obj):
+            if isinstance(obj, BaseConfig):
+                return obj.sample_dict()
+            if isinstance(obj, list):
+                return [_sample_dict(v) for v in obj]
+            return obj
+        res = {}
+        for _, field in self.__fields.items():
+            res[field({}, True)] = _sample_dict(field({}))
+        return res
+        # return {
+        #     field({}, True): _sample_dict(field({}))
+        #     for _, field in self.__fields.items()
+        # }
+
+    def to_dict(self) -> dict:
+        """Return a dictionary with all fields and values"""
+        def _to_dict(obj):
+            if isinstance(obj, BaseConfig):
+                return obj.to_dict()
+            if isinstance(obj, list):
+                return [_to_dict(v) for v in obj]
+            return obj
+        return {
+            field({}, True): _to_dict(getattr(self, member))
+            for member, field in self.__fields.items()
+        }
