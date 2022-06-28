@@ -7,6 +7,7 @@ Tool classes and functions for Guiosoft projects
 ![PyPI](https://img.shields.io/pypi/v/py-gstools)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/py-gstools)
 [![Pylint](https://github.com/guionardo/py-gstools/actions/workflows/pylint.yml/badge.svg)](https://github.com/guionardo/py-gstools/actions/workflows/pylint.yml)
+[![codecov](https://codecov.io/gh/guionardo/py-gstools/branch/develop/graph/badge.svg?token=ErE1TCweih)](https://codecov.io/gh/guionardo/py-gstools)
 
 ## Installing
 
