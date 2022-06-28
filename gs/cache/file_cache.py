@@ -1,5 +1,6 @@
 """File Cache"""
 import datetime
+import hashlib
 import json
 import logging
 import os
@@ -17,7 +18,8 @@ class FileCache(Cache):
         self.path = None
 
     def _filename(self, key: str) -> str:
-        return os.path.join(self.path, f'cache_{hash(key)}.json')
+        hash_name = hashlib.sha1(key.encode('utf-8')).hexdigest()
+        return os.path.join(self.path, f'cache_{hash_name}.json')
 
     def get(self, key: str) -> Union[str, None]:
         filename = self._filename(key)
