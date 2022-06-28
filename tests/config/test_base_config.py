@@ -35,6 +35,7 @@ class EnvConfig(BaseConfig):
 
 
 class ConfigTypes(BaseConfig):
+    """Types config"""
     INT_ARG: int = 1
     FLOAT_ARG: float = 1.0
     BOOL_ARG: bool = True
@@ -65,7 +66,6 @@ class TestBaseConfig(unittest.TestCase):
             SUB_CONFIGS=[{'ARG_1': 2, 'ARG_2': 'EFGH'}, {'ARG_1': 3, 'ARG_2': 'IJKL'}])
         self.assertEqual(cfg.INT_ARG, 2)
         self.assertEqual(cfg.SUB_CONFIG.ARG_1, 1)
-        
 
     def test_sample(self):
         cfg = Config()
