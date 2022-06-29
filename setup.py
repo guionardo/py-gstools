@@ -35,6 +35,16 @@ _name, _version, _description, _author, _author_email = get_definitions(
     'author',
     'author_email')
 
+DEV_STATUS = 'Development Status :: 4 - Beta'
+try:
+    version_numbers = [int(v) for v in _version.split('.')]
+    if len(version_numbers) > 0:
+        if version_numbers[0] > 0:
+            DEV_STATUS = 'Development Status :: 5 - Production/Stable'
+except Exception as exc:
+    print('Error on getting version numbers', exc)
+
+
 setup(
     name=_name,
     version=_version,
@@ -43,8 +53,9 @@ setup(
     long_description_content_type="text/markdown",
     license='MIT',
     classifiers=[
-        "Development Status :: 4 - Beta",
+        DEV_STATUS,
         "Environment :: Console",
+        "Operating System :: OS Independent",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Topic :: Software Development :: Build Tools",
