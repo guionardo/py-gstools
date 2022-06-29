@@ -76,6 +76,7 @@ class BaseConfig:
     def __init__(self, source=None, **dict_source):
         self.__fields = self.__parse_fields()
         self.__load(source or dict_source)
+        self.after_load()
 
     @classmethod
     def load_from_env(cls) -> 'BaseConfig':
@@ -176,14 +177,11 @@ class BaseConfig:
             if isinstance(obj, list):
                 return [_sample_dict(v) for v in obj]
             return obj
-        res = {}
-        for _, field in self.__fields.items():
-            res[field({}, True)] = _sample_dict(field({}))
-        return res
-        # return {
-        #     field({}, True): _sample_dict(field({}))
-        #     for _, field in self.__fields.items()
-        # }
+
+        return {
+            field({}, True): _sample_dict(field({}))
+            for _, field in self.__fields.items()
+        }
 
     def to_dict(self) -> dict:
         """Return a dictionary with all fields and values"""
@@ -197,3 +195,8 @@ class BaseConfig:
             field({}, True): _to_dict(getattr(self, member))
             for member, field in self.__fields.items()
         }
+
+    def after_load(self):
+        """Called after load
+        Override this method to add custom logic or validation after load"""
+        pass
