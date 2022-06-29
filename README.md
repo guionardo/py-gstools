@@ -200,3 +200,25 @@ print(cfg.to_dict())
 
 {'LIST_ARG': ['1', '2', '3', '4'], 'INT_ARG': 2, 'STR_ARG': '1234ABCD', 'SUB_CONFIG': {'ARG_2': 'abc', 'ARG_1': 2}, 'INT_ARG_2': 10, 'SUB_CONFIGS': [{'ARG_2': 'EFGH', 'ARG_1': 2}, {'ARG_2': 'IJKL', 'ARG_1': 3}]}
 ```
+
+### After loading validation
+
+```python
+from gs.config import BaseConfig
+
+class Config(BaseConfig):
+    
+    ARG_1: int = 10
+    ARG_2: str = 'abc'
+
+    def after_load(self):
+        if self.ARG_1 <= 0:
+            # Invalid argument
+            raise TypeError('ARG_1 must be positive', self.ARG_1)
+        if self.ARG_2 == 'ABC':
+            # Fixing argument
+            self.ARG_2 = 'abc'
+        
+        # Add anything you need to do/validate after loading
+
+```
