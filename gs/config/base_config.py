@@ -199,4 +199,3 @@ class BaseConfig:
     def after_load(self):
         """Called after load
         Override this method to add custom logic or validation after load"""
-        pass

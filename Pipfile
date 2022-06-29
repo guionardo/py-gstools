@@ -10,6 +10,7 @@ coverage = "*"
 twine = "*"
 setuptools = "*"
 pylint = "*"
+pre-commit = "*"
 
 [packages]
 redis = "*"
